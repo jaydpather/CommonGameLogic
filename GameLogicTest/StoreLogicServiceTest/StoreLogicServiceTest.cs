@@ -28,8 +28,20 @@ namespace GameLogicTest.StoreLogicServiceTest
         [TestMethod]
         public void GenerateSavePctString_Success()
         {
-            CallPrivateMethod(_storeLogicService, "GenerateSavePctString", new object[] { 45M });
+            var inputs = new[]          { 45M,   60.1M, 35.9M };
+            var expectedOutputs = new[] { "45%", "60%", "35%" };
 
+            if (inputs.Length != expectedOutputs.Length)
+                Assert.Fail("UT is set up incorrectly - number of inputs does not match number of expected outputs");
+
+            for(var i=0; i<inputs.Length; i++)
+            {
+                var curInput = inputs[i];
+                var curExpectedOutput = expectedOutputs[i];
+
+                CallPrivateMethod(_storeLogicService, "GenerateSavePctString", new object[] { curInput });
+                Assert.AreEqual(curExpectedOutput, curInput);
+            }
         }
 
         [TestMethod]
