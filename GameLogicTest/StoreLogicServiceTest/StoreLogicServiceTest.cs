@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using ThirdEyeSoftware.GameLogic;
 using ThirdEyeSoftware.GameLogic.StoreLogicService;
 
-namespace GameLogicTest
+namespace GameLogicTest.StoreLogicServiceTest
 {
     [TestClass]
-    public class StoreLogicServiceTest
+    public class StoreLogicServiceTest : TestBase
     {
         private StoreLogicService _storeLogicService;
         private IDataLayer _dataLayer;
@@ -23,6 +23,13 @@ namespace GameLogicTest
 
             _dataLayer = Substitute.For<IDataLayer>();
             _storeLogicService.DataLayer = _dataLayer;
+        }
+
+        [TestMethod]
+        public void GenerateSavePctString_Success()
+        {
+            CallPrivateMethod(_storeLogicService, "GenerateSavePctString", new object[] { 45M });
+
         }
 
         [TestMethod]
