@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ThirdEyeSoftware.GameLogic.LogicHandlers;
+using ThirdEyeSoftware.GameLogic.StoreLogicService;
 
 //todo v2: move GameLogic project above Assets folder, like GameLogicTest. (This prevents Unity from including the GameLogic source files in the TestGame project).
 namespace ThirdEyeSoftware.GameLogic

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThirdEyeSoftware.GameLogic;
+using ThirdEyeSoftware.GameLogic.StoreLogicService;
 
 namespace GameLogicTest
 {

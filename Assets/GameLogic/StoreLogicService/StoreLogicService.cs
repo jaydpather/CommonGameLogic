@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ThirdEyeSoftware.GameLogic
+namespace ThirdEyeSoftware.GameLogic.StoreLogicService
 {
     public interface IStoreLogicService
     {

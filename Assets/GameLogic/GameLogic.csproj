@@ -72,7 +72,9 @@
     <Compile Include="LogicHandlers\MenuLogicHandler.cs" />
     <Compile Include="LogicProviders\MenuLogicProviders\OutOfLivesLogicProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StoreLogicService.cs" />
+    <Compile Include="StoreLogicService\ProductInfo.cs" />
+    <Compile Include="StoreLogicService\ProductInfoViewModel.cs" />
+    <Compile Include="StoreLogicService\StoreLogicService.cs" />
     <Compile Include="Utils\RandomNumberGenerator.cs" />
     <Compile Include="Utils\Vector3.cs" />
   </ItemGroup>

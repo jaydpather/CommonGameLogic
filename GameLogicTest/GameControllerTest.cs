@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThirdEyeSoftware.GameLogic;
 using ThirdEyeSoftware.GameLogic.LogicHandlers;
+using ThirdEyeSoftware.GameLogic.StoreLogicService;
 
 namespace GameLogicTest
 {
