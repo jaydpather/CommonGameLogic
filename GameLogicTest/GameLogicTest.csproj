@@ -70,7 +70,7 @@
     <Compile Include="LogicProviders\MenuLogicProviders\InMenuLogicProviderTest.cs" />
     <Compile Include="LogicProviders\MenuLogicProviders\LoadingLogicProviderTest.cs" />
     <Compile Include="LogicProviders\MenuLogicProviders\OutOfLivesLogicProviderTest.cs" />
-    <Compile Include="StoreLogicServiceTest.cs" />
+    <Compile Include="StoreLogicServiceTest\StoreLogicServiceTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="LogicHandlers\GameLogicHandlerTest.cs" />
     <Compile Include="LogicHandlers\MenuLogicHandlerTest.cs" />

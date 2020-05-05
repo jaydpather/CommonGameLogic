@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using ThirdEyeSoftware.GameLogic;
 using ThirdEyeSoftware.GameLogic.StoreLogicService;
 
-namespace GameLogicTest
+namespace GameLogicTest.StoreLogicServiceTest
 {
     [TestClass]
-    public class StoreLogicServiceTest
+    public class StoreLogicServiceTest : TestBase
     {
         private StoreLogicService _storeLogicService;
         private IDataLayer _dataLayer;
@@ -23,6 +23,25 @@ namespace GameLogicTest
 
             _dataLayer = Substitute.For<IDataLayer>();
             _storeLogicService.DataLayer = _dataLayer;
+        }
+
+        [TestMethod]
+        public void GenerateSavePctString_Success()
+        {
+            var inputs = new[]          { 45M,   60.1M, 35.9M };
+            var expectedOutputs = new[] { "45%", "60%", "35%" };
+
+            if (inputs.Length != expectedOutputs.Length)
+                Assert.Fail("UT is set up incorrectly - number of inputs does not match number of expected outputs");
+
+            for(var i=0; i<inputs.Length; i++)
+            {
+                var curInput = inputs[i];
+                var curExpectedOutput = expectedOutputs[i];
+
+                CallPrivateMethod(_storeLogicService, "GenerateSavePctString", new object[] { curInput });
+                Assert.AreEqual(curExpectedOutput, curInput);
+            }
         }
 
         [TestMethod]

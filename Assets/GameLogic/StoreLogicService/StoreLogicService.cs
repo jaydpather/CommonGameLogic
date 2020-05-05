@@ -16,6 +16,11 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
     {
         private static readonly StoreLogicService _instance = new StoreLogicService();
 
+        private string GenerateSavePctString(decimal savePct)
+        {
+            throw new NotImplementedException();
+        }
+
         public static StoreLogicService Instance
         {
             get
