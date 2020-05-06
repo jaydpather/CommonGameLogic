@@ -26,6 +26,62 @@ namespace GameLogicTest.StoreLogicServiceTest
         }
 
         [TestMethod]
+        public void CalculateSavePercent_FiftyPercent()
+        {
+            var smallProduct = new ProductInfo { Price = 1M, Quantity = 1 };
+            var bulkProduct = new ProductInfo { Price = 5M, Quantity = 10 };
+
+            var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
+
+            Assert.AreEqual(50M, result);
+        }
+
+        [TestMethod]
+        public void CalculateSavePercent_OneThird()
+        {
+            //you'd have to pay $3 to get 3 lives with the small product
+            //but you can pay $2 to get 3 lives with the bulk product
+            //therefore, the user saves 33.333...%
+
+            var smallProduct = new ProductInfo { Price = 1M, Quantity = 1 };
+            var bulkProduct = new ProductInfo { Price = 2M, Quantity = 3 };
+
+            var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
+
+            var expectedResult = (1M / 3M) * 100;
+            Assert.AreEqual(50M, result);
+        }
+
+        [TestMethod]
+        public void CalculateSavePercent_Zero()
+        {
+            //you'd have to pay $3 to get 3 lives with the small product
+            //but you can pay $2 to get 3 lives with the bulk product
+            //therefore, the user saves 33.333...%
+
+            var smallProduct = new ProductInfo { Price = 1M, Quantity = 1 };
+
+            var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, smallProduct });
+
+            Assert.AreEqual(0M, result);
+        }
+
+        [TestMethod]
+        public void CalculateSavePercent_Negative()
+        {
+            //in this case, the bulk product is actually twice as expensive per quantity
+            //so, the user saves -100%
+            //hopefully this will never happen in prod. this test is just to check that our formula is correct
+
+            var smallProduct = new ProductInfo { Price = 1M, Quantity = 1 };
+            var bulkProduct = new ProductInfo { Price = 2M, Quantity = 1 };
+
+            var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
+
+            Assert.AreEqual(-100M, result);
+        }
+
+        [TestMethod]
         public void GenerateSavePctString_Success()
         {
             var inputs = new[]          { 45M,   60.1M, 35.9M };
