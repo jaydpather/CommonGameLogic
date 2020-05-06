@@ -21,6 +21,11 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
             throw new NotImplementedException();
         }
 
+        private void SetProductQuantity(List<ProductInfo> products)
+        {
+            throw new NotImplementedException();
+        }
+
         public static StoreLogicService Instance
         {
             get

@@ -45,6 +45,30 @@ namespace GameLogicTest.StoreLogicServiceTest
         }
 
         [TestMethod]
+        public void SetProductQuantity()
+        {
+            var smallProduct = new ProductInfo { ProductId = Constants.ProductNames.BuyLivesSmall };
+            var mediumProduct = new ProductInfo { ProductId = Constants.ProductNames.BuyLivesMedium };
+            var largeProduct = new ProductInfo { ProductId = Constants.ProductNames.BuyLivesLarge };
+            var invalidProduct = new ProductInfo { ProductId = "invalid", Quantity = -1 };
+
+            var products = new List<ProductInfo>
+            {
+                smallProduct,
+                mediumProduct,
+                largeProduct,
+                invalidProduct
+            };
+
+            CallPrivateMethod(_storeLogicService, "SetProductQuantity", new object[] { products });
+
+            Assert.AreEqual(Constants.LivesPerProduct.Small, smallProduct.Quantity);
+            Assert.AreEqual(Constants.LivesPerProduct.Medium, mediumProduct.Quantity);
+            Assert.AreEqual(Constants.LivesPerProduct.Large, largeProduct.Quantity);
+            Assert.AreEqual(-1, invalidProduct.Quantity); //verify this wasn't changed
+        }
+
+        [TestMethod]
         public void OnAppStorePurchaseSucceeded_Small()
         {
             _storeLogicService.OnAppStorePurchaseSucceeded(Constants.ProductNames.BuyLivesSmall);
