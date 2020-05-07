@@ -15,6 +15,8 @@ namespace GameLogicTest.StoreLogicServiceTest
     {
         private StoreLogicService _storeLogicService;
         private IDataLayer _dataLayer;
+        private const string VALIDATE_PRODUCTS_MISSING = "missing";
+        private const string VALIDATE_PRODUCTS_EXTRA = "extra";
 
         [TestInitialize]
         public void TestInitialize()
@@ -23,6 +25,74 @@ namespace GameLogicTest.StoreLogicServiceTest
 
             _dataLayer = Substitute.For<IDataLayer>();
             _storeLogicService.DataLayer = _dataLayer;
+        }
+
+        [TestMethod]
+        public void ValidateProducts_Success()
+        {
+            var products = new List<ProductInfo>()
+            {
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesLarge },
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesMedium},
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesSmall }
+            };
+
+            var results = _storeLogicService.ValidateProducts(products);
+
+            Assert.IsNotNull(results);
+            Assert.AreEqual(0, results.Count);
+        }
+
+        [TestMethod]
+        public void ValidateProducts_Missing()
+        {
+            var products = new List<ProductInfo>()
+            {
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesLarge },
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesMedium},
+            };
+
+            var results = _storeLogicService.ValidateProducts(products);
+
+            Assert.IsNotNull(results);
+            Assert.AreEqual(1, results.Count);
+            Assert.IsTrue(results[0].Contains(VALIDATE_PRODUCTS_MISSING));
+        }
+
+        [TestMethod]
+        public void ValidateProducts_Extra()
+        {
+            var products = new List<ProductInfo>()
+            {
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesLarge },
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesMedium},
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesSmall },
+                new ProductInfo { ProductId = "fake product" },
+            };
+
+            var results = _storeLogicService.ValidateProducts(products);
+
+            Assert.IsNotNull(results);
+            Assert.AreEqual(1, results.Count);
+            Assert.IsTrue(results[0].Contains(VALIDATE_PRODUCTS_MISSING));
+        }
+
+        [TestMethod]
+        public void ValidateProducts_MissingAndExtra()
+        {
+            var products = new List<ProductInfo>()
+            {
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesLarge },
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesMedium},
+                new ProductInfo { ProductId = "fake product" },
+            };
+
+            var results = _storeLogicService.ValidateProducts(products);
+
+            Assert.IsNotNull(results);
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual(1, results.Count(x => x.Contains(VALIDATE_PRODUCTS_MISSING)));
+            Assert.AreEqual(1, results.Count(x => x.Contains(VALIDATE_PRODUCTS_EXTRA)));
         }
 
         [TestMethod]
