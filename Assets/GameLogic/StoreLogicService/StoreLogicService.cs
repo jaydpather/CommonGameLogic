@@ -16,6 +16,11 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
     {
         private static readonly StoreLogicService _instance = new StoreLogicService();
 
+        private ProductInfo FindSmallestProductInfo(List<ProductInfo> productInfos)
+        {
+            return null;
+        }
+
         private decimal CalculateSavePercent(ProductInfo smallPackage, ProductInfo bulkPackage)
         {
             throw new NotImplementedException();
