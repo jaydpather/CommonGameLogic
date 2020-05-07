@@ -10,6 +10,7 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
         IDataLayer DataLayer { get; set; }
         void OnAppStorePurchaseSucceeded(string productId);
         Action<string> LogToDebugOutput { get; set; }
+        List<string> ValidateProducts(List<ProductInfo> products);
     }
 
     public class StoreLogicService : IStoreLogicService
@@ -82,6 +83,11 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
 
                 throw;
             }
+        }
+
+        public List<string> ValidateProducts(List<ProductInfo> products)
+        {
+            return null;
         }
     }
 }
