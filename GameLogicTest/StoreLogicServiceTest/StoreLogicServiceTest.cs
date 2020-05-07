@@ -26,6 +26,37 @@ namespace GameLogicTest.StoreLogicServiceTest
         }
 
         [TestMethod]
+        public void FindSmallestProductInfo_Success()
+        {
+            var smallProductInfo = new ProductInfo { ProductId = Constants.ProductNames.BuyLivesSmall };
+
+            var productInfos = new List<ProductInfo>()
+            {
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesLarge },
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesMedium },
+                smallProductInfo,
+            };
+
+            var result = CallPrivateMethod<ProductInfo>(_storeLogicService, "FindSmallestProductInfo", new object[] { productInfos });
+
+            Assert.AreEqual(smallProductInfo, result);
+        }
+
+        [TestMethod]
+        public void FindSmallestProductInfo_NotFound()
+        {
+            var productInfos = new List<ProductInfo>()
+            {
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesLarge },
+                new ProductInfo { ProductId = Constants.ProductNames.BuyLivesMedium },
+            };
+
+            Action testFn = () => CallPrivateMethod<ProductInfo>(_storeLogicService, "FindSmallestProductInfo", new object[] { productInfos });
+
+            Assert.ThrowsException<InvalidOperationException>(testFn);
+        }
+
+        [TestMethod]
         public void CalculateSavePercent_FiftyPercent()
         {
             var smallProduct = new ProductInfo { Price = 1M, Quantity = 1 };
