@@ -75,11 +75,7 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
             _btnBuyLivesLarge.GetComponent<IText>().Returns(_buttonAndSaveLabels[Constants.ProductNames.BuyLivesLarge].Item1);
             var savePctLargeGameObj = Substitute.For<IGameObject>();
             savePctLargeGameObj.GetComponent<IText>().Returns(_buttonAndSaveLabels[Constants.ProductNames.BuyLivesLarge].Item2);
-            _gameEngineInterface.FindGameObject("txtBuyLivesLargeSavePct").Returns(savePctMediumGameObj);
-
-            _btnBuyLivesLarge.GetComponent<IText>().Returns(_buttonAndSaveLabels[Constants.ProductNames.BuyLivesLarge].Item1);
-
-
+            _gameEngineInterface.FindGameObject("txtBuyLivesLargeSavePct").Returns(savePctLargeGameObj);
         }
 
         [TestMethod]
