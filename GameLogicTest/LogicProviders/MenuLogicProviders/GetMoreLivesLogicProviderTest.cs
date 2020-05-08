@@ -184,13 +184,11 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
             labels = _buttonAndSaveLabels[Constants.ProductNames.BuyLivesMedium];
             expectedButtonText = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Medium, products[1].PriceString);
             Assert.AreEqual(expectedButtonText, labels.Item1.Text);
-            Assert.IsTrue(labels.Item1.Text.Contains(products[1].PriceString));
             Assert.AreEqual(products[1].SavePctString, labels.Item2.Text);
 
             labels = _buttonAndSaveLabels[Constants.ProductNames.BuyLivesLarge];
             expectedButtonText = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Large, products[2].PriceString);
             Assert.AreEqual(expectedButtonText, labels.Item1.Text);
-            Assert.IsTrue(labels.Item1.Text.Contains(products[2].PriceString));
             Assert.AreEqual(products[2].SavePctString, labels.Item2.Text);
         }
     }
