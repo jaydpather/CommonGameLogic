@@ -24,12 +24,26 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
 
         private decimal CalculateSavePercent(ProductInfo smallPackage, ProductInfo bulkPackage)
         {
+
+            //smallProduct price = 1;
+            //bulkProduct quantity = 5;
+            //bulkProduct price = 10;
+            decimal finalPrice = 1 - (smallPackage.Price * bulkPackage.Quantity / bulkPackage.Price) * 100;
+            return finalPrice;
             throw new NotImplementedException();
         }
 
         private string GenerateSavePctString(decimal savePct)
         {
-            throw new NotImplementedException();
+            Math.Truncate (savePct);
+                     
+            if (savePct <= 0) {
+                return string.Empty;
+            } else {
+                Console.WriteLine(@"SAVE {savePct}%");
+                    }
+
+           throw new NotImplementedException();
         }
 
         private void SetProductQuantity(List<ProductInfo> products)
@@ -89,5 +103,8 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
         {
             return null;
         }
+        
+        
     }
+    
 }
