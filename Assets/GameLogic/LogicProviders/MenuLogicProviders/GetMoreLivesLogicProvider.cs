@@ -1,6 +1,8 @@
-﻿using ThirdEyeSoftware.GameLogic;
+﻿using System.Collections.Generic;
+using ThirdEyeSoftware.GameLogic;
 using ThirdEyeSoftware.GameLogic.LogicHandlers;
 using ThirdEyeSoftware.GameLogic.LogicProviders;
+using ThirdEyeSoftware.GameLogic.StoreLogicService;
 
 namespace GameLogic.LogicProviders.MenuLogicProviders
 {
@@ -95,6 +97,11 @@ namespace GameLogic.LogicProviders.MenuLogicProviders
         public override void OnDeActivate()
         {
             _pnlGetMoreLives.SetActive(false);
+        }
+
+        public void OnPricesLoaded(List<ProductInfoViewModel> products)
+        {
+
         }
     }
 }
