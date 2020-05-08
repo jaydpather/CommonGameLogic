@@ -10,11 +10,17 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
         IDataLayer DataLayer { get; set; }
         void OnAppStorePurchaseSucceeded(string productId);
         Action<string> LogToDebugOutput { get; set; }
+        List<string> ValidateProducts(List<ProductInfo> products);
     }
 
     public class StoreLogicService : IStoreLogicService
     {
         private static readonly StoreLogicService _instance = new StoreLogicService();
+
+        private ProductInfo FindSmallestProductInfo(List<ProductInfo> productInfos)
+        {
+            return null;
+        }
 
         private decimal CalculateSavePercent(ProductInfo smallPackage, ProductInfo bulkPackage)
         {
@@ -77,6 +83,11 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
 
                 throw;
             }
+        }
+
+        public List<string> ValidateProducts(List<ProductInfo> products)
+        {
+            return null;
         }
     }
 }
