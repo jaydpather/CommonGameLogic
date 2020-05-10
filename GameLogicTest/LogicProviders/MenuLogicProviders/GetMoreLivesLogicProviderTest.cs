@@ -19,6 +19,7 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
         private ILogicHandler _logicHandler;
         private IGameEngineInterface _gameEngineInterface;
         private IDataLayer _dataLayer;
+        private List<ProductInfoViewModel> _productInfoViewModels;
 
         private IGameObject _pnlGetMoreLives; 
         private IGameObject _btnCancel;
@@ -35,6 +36,16 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
             _logicHandler = Substitute.For<ILogicHandler>();
             _gameEngineInterface = Substitute.For<IGameEngineInterface>();
             _dataLayer = Substitute.For<IDataLayer>();
+
+            var gameController = Substitute.For<IGameController>();
+            _logicHandler.GameController.Returns(gameController);
+            _productInfoViewModels = new List<ProductInfoViewModel>()
+                {
+                    new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesSmall, PriceString = "$0.99", SavePctString = string.Empty },
+                    new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesMedium, PriceString = "$1.99", SavePctString = "SAVE 30%" },
+                    new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesLarge, PriceString = "$2.99", SavePctString = "SAVE 40%" },
+                };
+            gameController.ProductsForUI.Returns(_productInfoViewModels);
 
             _dataLayer.GetNumLivesRemaining().Returns(10);
 
@@ -112,9 +123,10 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
 
             //call:
             _getMoreLivesLogicProvider.OnActivate();
-
+            
             //verify:
             _pnlGetMoreLives.Received().SetActive(true);
+            AssertPriceLabelsAreCorrect();
         }
 
         [TestMethod]
@@ -159,37 +171,26 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
             _logicHandler.Received(1).SetSceneState((int)MenuState.InMenu);
         }
 
-        [TestMethod]
-        public void OnPricesLoaded()
+        private void AssertPriceLabelsAreCorrect()
         {
-            _getMoreLivesLogicProvider.OnStart();
-
-            var products = new List<ProductInfoViewModel>()
-            {
-                new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesSmall, PriceString = "$0.99", SavePctString = string.Empty },
-                new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesMedium, PriceString = "$1.99", SavePctString = "SAVE 30%" },
-                new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesLarge, PriceString = "$2.99", SavePctString = "SAVE 40%" },
-            };
-            _getMoreLivesLogicProvider.OnPricesLoaded(products);
-
             var buttonTextFormatString = @"{0}
  LIVES 
 {1}";
 
             var labels = _buttonAndSaveLabels[Constants.ProductNames.BuyLivesSmall];
-            var expectedButtonText = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Small, products[0].PriceString);
+            var expectedButtonText = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Small, _productInfoViewModels[0].PriceString);
             Assert.AreEqual(expectedButtonText, labels.Item1.Text);
-            Assert.AreEqual(products[0].SavePctString, labels.Item2.Text);
+            Assert.AreEqual(_productInfoViewModels[0].SavePctString, labels.Item2.Text);
 
             labels = _buttonAndSaveLabels[Constants.ProductNames.BuyLivesMedium];
-            expectedButtonText = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Medium, products[1].PriceString);
+            expectedButtonText = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Medium, _productInfoViewModels[1].PriceString);
             Assert.AreEqual(expectedButtonText, labels.Item1.Text);
-            Assert.AreEqual(products[1].SavePctString, labels.Item2.Text);
+            Assert.AreEqual(_productInfoViewModels[1].SavePctString, labels.Item2.Text);
 
             labels = _buttonAndSaveLabels[Constants.ProductNames.BuyLivesLarge];
-            expectedButtonText = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Large, products[2].PriceString);
+            expectedButtonText = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Large, _productInfoViewModels[2].PriceString);
             Assert.AreEqual(expectedButtonText, labels.Item1.Text);
-            Assert.AreEqual(products[2].SavePctString, labels.Item2.Text);
+            Assert.AreEqual(_productInfoViewModels[2].SavePctString, labels.Item2.Text);
         }
     }
 }
