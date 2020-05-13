@@ -19,6 +19,7 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
         private ILogicHandler _logicHandler;
         private IGameEngineInterface _gameEngineInterface;
         private IDataLayer _dataLayer;
+        private IGameController _gameController;
         private List<ProductInfoViewModel> _productInfoViewModels;
 
         private IGameObject _pnlGetMoreLives; 
@@ -28,6 +29,7 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
         private IGameObject _btnBuyLivesLarge;
         private IGameObject _txtCurrentLivesGameObject;
         private IText _txtCurrentLives;
+        private IText _txtDebugOutput;
         private Dictionary<string, Tuple<IText, IText>> _buttonAndSaveLabels = new Dictionary<string, Tuple<IText, IText>>();
 
         [TestInitialize]
@@ -37,15 +39,15 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
             _gameEngineInterface = Substitute.For<IGameEngineInterface>();
             _dataLayer = Substitute.For<IDataLayer>();
 
-            var gameController = Substitute.For<IGameController>();
-            _logicHandler.GameController.Returns(gameController);
+            _gameController = Substitute.For<IGameController>();
+            _logicHandler.GameController.Returns(_gameController);
             _productInfoViewModels = new List<ProductInfoViewModel>()
                 {
                     new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesSmall, PriceString = "$0.99", SavePctString = string.Empty },
                     new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesMedium, PriceString = "$1.99", SavePctString = "SAVE 30%" },
                     new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesLarge, PriceString = "$2.99", SavePctString = "SAVE 40%" },
                 };
-            gameController.ProductsForUI.Returns(_productInfoViewModels);
+            _gameController.ProductsForUI.Returns(_productInfoViewModels);
 
             _dataLayer.GetNumLivesRemaining().Returns(10);
 
@@ -71,6 +73,10 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
             _txtCurrentLivesGameObject.GetComponent<IText>().Returns(_txtCurrentLives);
             _gameEngineInterface.FindGameObject("txtCurrentLives").Returns(_txtCurrentLivesGameObject);
 
+            var txtDebugOutputGameObject = Substitute.For<IGameObject>();
+            _txtDebugOutput = Substitute.For<IText>();
+            txtDebugOutputGameObject.GetComponent<IText>().Returns(_txtDebugOutput);
+            _gameEngineInterface.FindGameObject("txtDebutOutput").Returns(txtDebugOutputGameObject);
 
             _buttonAndSaveLabels[Constants.ProductNames.BuyLivesSmall] = new Tuple<IText, IText>(Substitute.For<IText>(), Substitute.For<IText>());
             _btnBuyLivesSmall.GetComponent<IText>().Returns(_buttonAndSaveLabels[Constants.ProductNames.BuyLivesSmall].Item1);
@@ -108,9 +114,7 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
 
             _gameEngineInterface.Received(1).FindGameObject("txtCurrentLives");
             _txtCurrentLivesGameObject.Received(1).GetComponent<IText>();
-            var expectedText = "REMAINING LIVES: " + _dataLayer.GetNumLivesRemaining();
-            Assert.AreEqual(_txtCurrentLives.Text, expectedText);
-
+            
             _gameEngineInterface.Received().FindGameObject("pnlGetMoreLives");
             _pnlGetMoreLives.Received().SetActive(false);
         }
@@ -126,7 +130,43 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
             
             //verify:
             _pnlGetMoreLives.Received().SetActive(true);
+            var expectedText = "REMAINING LIVES: " + _dataLayer.GetNumLivesRemaining();
+            Assert.AreEqual(_txtCurrentLives.Text, expectedText);
             AssertPriceLabelsAreCorrect();
+        }
+
+        [TestMethod]
+        public void OnActivate_ProductsEmpty()
+        {
+            //init:
+            _getMoreLivesLogicProvider.OnStart();
+
+            //re-do mock, change the value for error case:
+            _gameController = Substitute.For<IGameController>();
+            _gameController.ProductsForUI.Returns(new List<ProductInfoViewModel>());
+
+            //call:
+            _getMoreLivesLogicProvider.OnActivate();
+
+            //verify:
+            Assert.IsFalse(string.IsNullOrWhiteSpace(_txtDebugOutput.Text));
+        }
+
+        [TestMethod]
+        public void OnActivate_ProductsNull()
+        {
+            //init:
+            _getMoreLivesLogicProvider.OnStart();
+
+            //re-do mock, change the value for error case:
+            _gameController = Substitute.For<IGameController>();
+            _gameController.ProductsForUI.Returns((List<ProductInfoViewModel>)null);
+
+            //call:
+            _getMoreLivesLogicProvider.OnActivate();
+
+            //verify:
+            Assert.IsFalse(string.IsNullOrWhiteSpace(_txtDebugOutput.Text));
         }
 
         [TestMethod]
