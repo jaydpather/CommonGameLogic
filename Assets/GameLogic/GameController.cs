@@ -20,6 +20,7 @@ namespace ThirdEyeSoftware.GameLogic
         void ProgressToNextLevel();
         bool JustBeatMaxLevel { get; }
         bool JustSavedLatestLevel { get; set; }
+        List<ProductInfoViewModel> ProductsForUI { get; set; }
     }
 
     public class ScoreInfo
@@ -119,7 +120,7 @@ namespace ThirdEyeSoftware.GameLogic
         private ILogicHandler _gameLogicHandler;
         private ILogicHandler _menuLogicHandler;
         public bool ShouldUpdate { get; set; }
-
+        public List<ProductInfoViewModel> ProductsForUI { get; set; } = new List<ProductInfoViewModel>();
 
         public static GameController Instance
         {
