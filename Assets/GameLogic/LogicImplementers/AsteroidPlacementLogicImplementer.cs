@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using ThirdEyeSoftware.GameLogic;
 using ThirdEyeSoftware.GameLogic.Utils;
-using UnityEngine;
+//using UnityEngine;
 
 namespace GameLogic.LogicImplementers
 {
@@ -248,7 +248,7 @@ namespace GameLogic.LogicImplementers
                 minDistance = 0 + (ASTEROID_WIDTH/2f); //first asteroid can be all the way up to the left edge of the screen, but not hanging off the edge
                 var screenWidth = X_MAX - X_MIN;
                 var clampMax = screenWidth - (ASTEROID_WIDTH / 2f);
-                maxDistance = Mathf.Clamp(maxDistance, minDistance, clampMax); //by clamping here (instead of after we've returned, clamped asteroids will not always be at the right edge of the screen)
+                //maxDistance = Mathf.Clamp(maxDistance, minDistance, clampMax); //by clamping here (instead of after we've returned, clamped asteroids will not always be at the right edge of the screen)
 
                 retVal = _initialRandomGenrator.GetRandomValue(minDistance, maxDistance);
             }

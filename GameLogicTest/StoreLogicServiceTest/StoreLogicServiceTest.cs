@@ -150,7 +150,8 @@ namespace GameLogicTest.StoreLogicServiceTest
             var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
 
             var expectedResult = (1M / 3M) * 100;
-            Assert.AreEqual(50M, result);
+            Assert.AreEqual(expectedResult, result);
+            // was Assert.AreEqual(50M, result); now gives a correct result
         }
 
         [TestMethod]
