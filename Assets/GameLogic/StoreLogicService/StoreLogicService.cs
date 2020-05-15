@@ -29,22 +29,23 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
             decimal packagePrice = bulkPrice / bulkPackage.Quantity;
             decimal priceSaved = (1 - packagePrice) * 100;
             return priceSaved;
-            
-            throw new NotImplementedException();
+           
         }
 
         private string GenerateSavePctString(decimal savePct)
-        {                           
+        {
+            string saveResult;
             if (savePct <= 0) 
             {
-             return string.Empty;
+              saveResult = string.Empty;
             } 
             else 
             {
-             return @"SAVE " + Math.Truncate(savePct) + "%";
-            } 
+              saveResult =  $"SAVE { Math.Truncate(savePct)}%";
+            }
 
-           //throw new NotImplementedException();
+            return saveResult;
+                       
         }
 
         private void SetProductQuantity(List<ProductInfo> products)
