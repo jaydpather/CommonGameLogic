@@ -12,7 +12,7 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
         Action<string> LogToDebugOutput { get; set; }
         List<string> ValidateProducts(List<ProductInfo> products);
         void OnProductsLoaded(List<ProductInfo> validatedProducts);
-        Action<ProductInfoViewModel> OnProductsConverted { get; set; }
+        Action<List<ProductInfoViewModel>> OnProductsConverted { get; set; }
     }
 
     public class StoreLogicService : IStoreLogicService
@@ -60,12 +60,6 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
         }
 
         public Action<List<ProductInfoViewModel>> OnProductsConverted
-        {
-            get;
-            set;
-        }
-
-        Action<ProductInfoViewModel> IStoreLogicService.OnProductsConverted
         {
             get;
             set;
