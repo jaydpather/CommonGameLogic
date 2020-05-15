@@ -11,6 +11,8 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
         void OnAppStorePurchaseSucceeded(string productId);
         Action<string> LogToDebugOutput { get; set; }
         List<string> ValidateProducts(List<ProductInfo> products);
+        void OnProductsLoaded(List<ProductInfo> validatedProducts);
+        Action<List<ProductInfoViewModel>> OnProductsConverted { get; set; }
     }
 
     public class StoreLogicService : IStoreLogicService
@@ -57,13 +59,19 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
             set;
         }
 
+        public Action<List<ProductInfoViewModel>> OnProductsConverted
+        {
+            get;
+            set;
+        }
+
         public void OnAppStorePurchaseSucceeded(string productId)
         {
             //todo real game: extract method: SaveAdState: 
             try
             {
                 //LogToDebugOutput("StoreLogicService.OnAppStorePurchaseSucceeded()");
-
+                
                 switch (productId)
                 {
                     case Constants.ProductNames.BuyLivesSmall:
@@ -88,6 +96,11 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
         public List<string> ValidateProducts(List<ProductInfo> products)
         {
             return null;
+        }
+
+        public void OnProductsLoaded(List<ProductInfo> validatedProducts)
+        {
+            
         }
     }
 }
