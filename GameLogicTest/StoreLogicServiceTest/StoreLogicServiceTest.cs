@@ -254,5 +254,45 @@ namespace GameLogicTest.StoreLogicServiceTest
 
             _dataLayer.DidNotReceive().IncrementNumLivesRemaining(Arg.Any<int>());
         }
+
+        [TestMethod]
+        public void OnProductsLoaded()
+        {
+            var validatedProducts = new List<ProductInfo>
+            {
+                new ProductInfo { Price = 0.99M, PriceString = "$0.99", ProductId = Constants.ProductNames.BuyLivesSmall },
+                new ProductInfo { Price = 1.99M, PriceString = "$1.99", ProductId = Constants.ProductNames.BuyLivesMedium },
+                new ProductInfo { Price = 2.99M, PriceString = "$2.99", ProductId = Constants.ProductNames.BuyLivesLarge },
+            };
+            var expectedSaveStrings = new string[] { string.Empty, "SAVE 32%", "SAVE 45%" };
+
+            Assert.AreEqual(3, validatedProducts.Count); //check for correct test setup
+            Assert.AreEqual(validatedProducts.Count, expectedSaveStrings.Length); //check for correct test setup
+
+            _storeLogicService.OnProductsConverted = viewModels =>
+            {
+                Assert.IsNotNull(viewModels);
+                Assert.AreEqual(validatedProducts.Count, viewModels.Count);
+
+                for(var i=0; i<viewModels.Count; i++)
+                {
+                    var curViewModel = viewModels[i];
+                    var curExpectedSaveString = expectedSaveStrings[i];
+
+                    Assert.IsNotNull(curViewModel);
+                    Assert.AreEqual(curViewModel.ProductId, curViewModel.ProductId);
+                    Assert.AreEqual(curViewModel.PriceString, curViewModel.PriceString);
+                    Assert.AreEqual(curExpectedSaveString, curViewModel.SavePctString);
+                }
+            };
+
+            _storeLogicService.OnProductsLoaded(validatedProducts);
+
+            Assert.AreEqual(Constants.LivesPerProduct.Small, validatedProducts[0].Quantity);
+            Assert.AreEqual(Constants.LivesPerProduct.Medium, validatedProducts[1].Quantity);
+            Assert.AreEqual(Constants.LivesPerProduct.Large, validatedProducts[2].Quantity);
+
+            _storeLogicService.OnProductsConverted.ReceivedWithAnyArgs(1);
+        }
     }
 }
