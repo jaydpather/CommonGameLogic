@@ -2,6 +2,8 @@
 using System.Collections;
 using ThirdEyeSoftware.GameLogic.LogicHandlers;
 using GameLogic.Utils;
+using ThirdEyeSoftware.GameLogic.StoreLogicService;
+using System.Collections.Generic;
 
 namespace ThirdEyeSoftware.GameLogic
 {
@@ -160,6 +162,7 @@ namespace ThirdEyeSoftware.GameLogic
         Action OnPurchaseFailedEventHandler { get; set; }
         Action<string> OnPurchaseSucceededEventHandler { get; set; }
         Action<string> LogToDebugOutput { get; set; }
+        Action<List<ProductInfo>> OnAppStoreInitialized { get; set; }
     }
 
     public interface IProductInfo

@@ -96,6 +96,31 @@ namespace GameLogicTest
         }
 
         [TestMethod]
+        public void OnStart_SetOnAppStoreInitialized()
+        {
+            //setup
+            //todo: dup mocking code. move common code to TestInitialize()
+            var gameController = GameController.Instance;
+
+            var gameEngineInterface = Substitute.For<IGameEngineInterface>();
+            gameEngineInterface.AppStoreService = Substitute.For<IAppStoreService>();
+            gameEngineInterface.AppStoreService.OnPurchaseSucceededEventHandler = null;
+            gameEngineInterface.AppStoreService.OnAppStoreInitialized = null;
+
+            var storeLogicService = Substitute.For<IStoreLogicService>();
+            storeLogicService.DataLayer = null;
+
+            var dataLayer = Substitute.For<IDataLayer>();
+            gameController.CurLevel = new LevelInfo(3, 1);
+
+            //run
+            gameController.OnStart(gameEngineInterface, dataLayer, storeLogicService);
+
+            //assert
+            Assert.IsNotNull(gameEngineInterface.AppStoreService.OnAppStoreInitialized);
+        }
+
+        [TestMethod]
         public void OnUpdate_ShouldUpdate()
         {
             #region arrange
