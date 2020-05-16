@@ -23,6 +23,16 @@ namespace GameLogicTest
         {
             //todo: need to be able to clear all properties (can't  re-instantiate since it's singleton)
             //      * maybe re-evaluate to see if this really needs to be singleton
+            _gameController = GameController.Instance;
+        }
+
+        [TestMethod]
+        public void OnProductsConvertedHandler()
+        {
+            var productsForUI = new List<ProductInfoViewModel>();
+            CallPrivateMethod(_gameController, "OnProductsConvertedHandler", new object[] { productsForUI });
+
+            Assert.AreEqual(productsForUI, _gameController.ProductsForUI);
         }
 
         [TestMethod]
