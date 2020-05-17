@@ -8,12 +8,25 @@ namespace GameLogic.LogicProviders.MenuLogicProviders
 {
     public class GetMoreLivesLogicProvider : BaseLogicProvider
     {
+        class ProductUIControls
+        {
+            public IText ButtonLabel { get; set; }
+            public IText SavePctLabel { get; set; }
+
+            public ProductUIControls(IText buttonLabel, IText savePctLabel)
+            {
+                ButtonLabel = buttonLabel;
+                SavePctLabel = savePctLabel;
+            }
+        }
+
         private IGameObject _pnlGetMoreLives;
         private IGameObject _btnCancel;
         private IGameObject _btnBuyLivesSmall;
         private IGameObject _btnBuyLivesMedium;
         private IGameObject _btnBuyLivesLarge;
         private IText _txtCurrentLives;
+        Dictionary<string, ProductUIControls> _productTextBoxMapping = new Dictionary<string, ProductUIControls>();
 
         public GetMoreLivesLogicProvider(ILogicHandler logicHandler, IGameEngineInterface gameEngineInterface, IDataLayer dataLayer)
             : base(logicHandler, gameEngineInterface, dataLayer)
@@ -81,10 +94,22 @@ namespace GameLogic.LogicProviders.MenuLogicProviders
 
             var txtCurrentLivesGameObject = _gameEngineInterface.FindGameObject("txtCurrentLives");
             _txtCurrentLives = txtCurrentLivesGameObject.GetComponent<IText>();
-            
+
+            _populateProductTextBoxMapping();
 
             _pnlGetMoreLives = _gameEngineInterface.FindGameObject("pnlGetMoreLives");
             _pnlGetMoreLives.SetActive(false);
+        }
+
+        private void _populateProductTextBoxMapping()
+        {
+            var txtSavePctSmall = _gameEngineInterface.FindGameObject("txtBuyLivesSmallSavePct").GetComponent<IText>();
+            var txtSavePctMedium = _gameEngineInterface.FindGameObject("txtBuyLivesMediumSavePct").GetComponent<IText>();
+            var txtSavePctLarge = _gameEngineInterface.FindGameObject("txtBuyLivesLargeSavePct").GetComponent<IText>();
+
+            _productTextBoxMapping[Constants.ProductNames.BuyLivesSmall] = new ProductUIControls(_btnBuyLivesSmall.GetComponent<IText>(), txtSavePctSmall);
+            _productTextBoxMapping[Constants.ProductNames.BuyLivesMedium] = new ProductUIControls(_btnBuyLivesMedium.GetComponent<IText>(), txtSavePctMedium);
+            _productTextBoxMapping[Constants.ProductNames.BuyLivesLarge] = new ProductUIControls(_btnBuyLivesLarge.GetComponent<IText>(), txtSavePctLarge);
         }
 
         public override void OnActivate()
@@ -94,11 +119,17 @@ namespace GameLogic.LogicProviders.MenuLogicProviders
             _txtCurrentLives.Text = "REMAINING LIVES: " + _dataLayer.GetNumLivesRemaining();
         }
 
+        private void SetPriceLabels(List<ProductInfoViewModel> products)
+        {
+
+        }
+
         public override void OnDeActivate()
         {
             _pnlGetMoreLives.SetActive(false);
         }
 
+        //todo: this needs to be removed, right? no longer planning to use this
         public void OnPricesLoaded(List<ProductInfoViewModel> products)
         {
 
