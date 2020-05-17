@@ -210,6 +210,11 @@ namespace ThirdEyeSoftware.GameLogic
             set;
         }
 
+        private void OnProductsConvertedHandler(List<ProductInfoViewModel> productsForUI)
+        {
+
+        }
+
         public void ProgressToNextLevel()
         {
             if (CurLevel.SubLevel < Constants.Levels.NumSubLevels)
