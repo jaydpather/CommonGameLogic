@@ -76,7 +76,7 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
             var txtDebugOutputGameObject = Substitute.For<IGameObject>();
             _txtDebugOutput = Substitute.For<IText>();
             txtDebugOutputGameObject.GetComponent<IText>().Returns(_txtDebugOutput);
-            _gameEngineInterface.FindGameObject("txtDebutOutput").Returns(txtDebugOutputGameObject);
+            _gameEngineInterface.FindGameObject("txtDebugOutput").Returns(txtDebugOutputGameObject);
 
             _buttonAndSaveLabels[Constants.ProductNames.BuyLivesSmall] = new Tuple<IText, IText>(Substitute.For<IText>(), Substitute.For<IText>());
             _btnBuyLivesSmall.GetComponent<IText>().Returns(_buttonAndSaveLabels[Constants.ProductNames.BuyLivesSmall].Item1);
@@ -123,6 +123,27 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
         public void OnActivate()
         {
             //init:
+            _gameController.ProductsForUI.Returns(new List<ProductInfoViewModel>
+            {
+                new ProductInfoViewModel
+                {
+                    PriceString = "$0.99",
+                    ProductId = Constants.ProductNames.BuyLivesSmall,
+                    SavePctString = string.Empty
+                },
+                new ProductInfoViewModel
+                {
+                    PriceString = "$1.99",
+                    ProductId = Constants.ProductNames.BuyLivesMedium,
+                    SavePctString = "SAVE 30%"
+                },
+                new ProductInfoViewModel
+                {
+                    PriceString = "$2.99",
+                    ProductId = Constants.ProductNames.BuyLivesLarge,
+                    SavePctString = "SAVE 40%"
+                },
+            });
             _getMoreLivesLogicProvider.OnStart();
 
             //call:
@@ -139,6 +160,7 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
         public void OnActivate_ProductsEmpty()
         {
             //init:
+            _gameController.ProductsForUI.Returns(new List<ProductInfoViewModel>());
             _getMoreLivesLogicProvider.OnStart();
 
             //re-do mock, change the value for error case:
@@ -156,6 +178,7 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
         public void OnActivate_ProductsNull()
         {
             //init:
+            _gameController.ProductsForUI.Returns((List<ProductInfoViewModel>)null);
             _getMoreLivesLogicProvider.OnStart();
 
             //re-do mock, change the value for error case:
