@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ThirdEyeSoftware.GameLogic;
 using ThirdEyeSoftware.GameLogic.LogicHandlers;
 using ThirdEyeSoftware.GameLogic.LogicProviders;
@@ -117,11 +118,35 @@ namespace GameLogic.LogicProviders.MenuLogicProviders
             _pnlGetMoreLives.SetActive(true);
 
             _txtCurrentLives.Text = "REMAINING LIVES: " + _dataLayer.GetNumLivesRemaining();
+
+            SetPriceLabels(_logicHandler.GameController.ProductsForUI);
         }
 
+        //todo: this List should have really been a dictionary, keyed by product ID
         private void SetPriceLabels(List<ProductInfoViewModel> products)
         {
+            if(products == null || products.Count == 0)
+            {
+                LogToDebugOutput("Could not load products from Google Play store. Please try again later.");
+            }
+            else
+            {
+                var buttonTextFormatString = @"{0}
+ LIVES 
+{1}";
+                var smallProduct = products.Single(x => x.ProductId == Constants.ProductNames.BuyLivesSmall);
+                var medProduct = products.Single(x => x.ProductId == Constants.ProductNames.BuyLivesMedium);
+                var largeProduct = products.Single(x => x.ProductId == Constants.ProductNames.BuyLivesLarge);
 
+                _productTextBoxMapping[Constants.ProductNames.BuyLivesSmall].ButtonLabel.Text = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Small, smallProduct.PriceString);
+                _productTextBoxMapping[Constants.ProductNames.BuyLivesMedium].ButtonLabel.Text = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Medium, medProduct.PriceString);
+                _productTextBoxMapping[Constants.ProductNames.BuyLivesLarge].ButtonLabel.Text = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Large, largeProduct.PriceString);
+
+                _productTextBoxMapping[Constants.ProductNames.BuyLivesSmall].SavePctLabel.Text = smallProduct.SavePctString;
+                _productTextBoxMapping[Constants.ProductNames.BuyLivesMedium].SavePctLabel.Text = medProduct.SavePctString;
+                _productTextBoxMapping[Constants.ProductNames.BuyLivesLarge].SavePctLabel.Text = largeProduct.SavePctString;
+
+            }
         }
 
         public override void OnDeActivate()
