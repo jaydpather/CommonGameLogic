@@ -24,27 +24,28 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
 
         private decimal CalculateSavePercent(ProductInfo smallPackage, ProductInfo bulkPackage)
         {
-            decimal standardPrice = smallPackage.Price;
+            decimal standardPrice = smallPackage.Price * smallPackage.Quantity;
             decimal bulkPrice = standardPrice * bulkPackage.Price;
             decimal packagePrice = bulkPrice / bulkPackage.Quantity;
             decimal priceSaved = (1 - packagePrice) * 100;
-            return priceSaved;
+            decimal retVal = priceSaved;
+            return retVal;
            
         }
 
         private string GenerateSavePctString(decimal savePct)
         {
-            string saveResult;
+            string retVal;
             if (savePct <= 0) 
             {
-              saveResult = string.Empty;
+                retVal = string.Empty;
             } 
             else 
             {
-              saveResult =  $"SAVE { Math.Truncate(savePct)}%";
+                retVal =  $"SAVE { Math.Truncate(savePct)}%";
             }
 
-            return saveResult;
+            return retVal;
                        
         }
 

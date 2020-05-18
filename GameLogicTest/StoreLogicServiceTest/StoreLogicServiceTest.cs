@@ -184,6 +184,16 @@ namespace GameLogicTest.StoreLogicServiceTest
         }
 
         [TestMethod]
+        public void CalculateSavePercent_DifferentQuantity()
+        {
+            var smallProduct = new ProductInfo { Price = 1M, Quantity = 3 };
+            var bulkProduct = new ProductInfo { Price = 5M, Quantity = 50 };
+
+            var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
+
+            Assert.AreEqual(70M, result);
+        }
+        [TestMethod]
         public void GenerateSavePctString()
         {
             var inputs = new[]          { 45M,   60.1M, 35.9M };
