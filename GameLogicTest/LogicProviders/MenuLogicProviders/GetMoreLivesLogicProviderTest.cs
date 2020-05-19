@@ -234,6 +234,20 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
             _logicHandler.Received(1).SetSceneState((int)MenuState.InMenu);
         }
 
+        [TestMethod]
+        public void OnPricesLoaded()
+        {
+            _getMoreLivesLogicProvider.OnStart();
+
+            var products = new List<ProductInfoViewModel>()
+            {
+                new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesSmall, PriceString = "$0.99", SavePctString = string.Empty },
+                new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesMedium, PriceString = "$1.99", SavePctString = "SAVE 30%" },
+                new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesLarge, PriceString = "$2.99", SavePctString = "SAVE 40%" },
+            };
+            _getMoreLivesLogicProvider.OnPricesLoaded(products);
+        }
+
         private void AssertPriceLabelsAreCorrect()
         {
             var buttonTextFormatString = @"{0}

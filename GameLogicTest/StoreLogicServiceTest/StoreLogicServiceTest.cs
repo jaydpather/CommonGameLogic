@@ -150,7 +150,8 @@ namespace GameLogicTest.StoreLogicServiceTest
             var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
 
             var expectedResult = (1M / 3M) * 100;
-            Assert.AreEqual(50M, result);
+            Assert.AreEqual(expectedResult, result);
+            // was Assert.AreEqual(50M, result); now gives a correct result
         }
 
         [TestMethod]
@@ -180,6 +181,41 @@ namespace GameLogicTest.StoreLogicServiceTest
             var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
 
             Assert.AreEqual(-100M, result);
+        }
+
+        [TestMethod]
+        public void CalculateSavePercent_DifferentQuantity()
+        {
+            var smallProduct = new ProductInfo { Price = 1M, Quantity = 3 };
+            var bulkProduct = new ProductInfo { Price = 5M, Quantity = 50 };
+
+            var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
+
+            Assert.AreEqual(70M, result);
+        }
+
+        [TestMethod]
+        public void CalculateSavePercent_DecimalPricesMedium()
+        {
+            var smallProduct = new ProductInfo { Price = 0.99M, Quantity = 10 };
+            var bulkProduct = new ProductInfo { Price = 1.99M, Quantity = 30 };
+            decimal calculation = (1M - (1.99M / (0.99M/10*30))) * 100M;
+
+            var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
+            
+            Assert.AreEqual(calculation, result);
+        }
+
+        [TestMethod]
+        public void CalculateSavePercent_DecimalPricesLarge()
+        {
+            var smallProduct = new ProductInfo { Price = 0.99M, Quantity = 10 };
+            var bulkProduct = new ProductInfo { Price = 2.99M, Quantity = 55 };
+            decimal calculation = (1M - (2.99M / (0.99M/10*55))) * 100M;
+
+            var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
+
+            Assert.AreEqual(calculation, result);
         }
 
         [TestMethod]

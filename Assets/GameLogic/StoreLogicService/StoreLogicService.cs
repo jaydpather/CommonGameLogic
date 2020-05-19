@@ -19,19 +19,36 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
     {
         private static readonly StoreLogicService _instance = new StoreLogicService();
 
-        private ProductInfo FindSmallestProductInfo(List<ProductInfo> productInfos)
+        private ProductInfo FindSmallestProductInfo (List<ProductInfo>productInfos)
         {
-            return null;
+              return null;
         }
 
         private decimal CalculateSavePercent(ProductInfo smallPackage, ProductInfo bulkPackage)
         {
-            throw new NotImplementedException();
+            decimal smallBulkPrice = smallPackage.Price / smallPackage.Quantity * bulkPackage.Quantity;
+            decimal bulkPrice = bulkPackage.Price;
+            decimal packagePrice = bulkPrice / smallBulkPrice;
+            decimal priceSaved = (1 - packagePrice) * 100;
+            decimal retVal = priceSaved;
+            return retVal;
+           
         }
 
         private string GenerateSavePctString(decimal savePct)
         {
-            throw new NotImplementedException();
+            string retVal;
+            if (savePct <= 0) 
+            {
+                retVal = string.Empty;
+            } 
+            else 
+            {
+                retVal =  $"SAVE { Math.Truncate(savePct)}%";
+            }
+
+            return retVal;
+                       
         }
 
         private void SetProductQuantity(List<ProductInfo> products)
@@ -103,4 +120,5 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
             
         }
     }
+    
 }
