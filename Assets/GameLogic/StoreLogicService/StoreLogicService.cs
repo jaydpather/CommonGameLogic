@@ -17,9 +17,20 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
     {
         private static readonly StoreLogicService _instance = new StoreLogicService();
 
-        private ProductInfo FindSmallestProductInfo (List<ProductInfo>productInfos)
+        private ProductInfo FindSmallestProductInfo(List<ProductInfo> productInfos)
         {
-              return null;
+            //return the ProductInfo whose Id matches the Constant for the Small Product Name
+            var information = productInfos[0];
+            int pInfo = 0;
+
+          while (information.ProductId != Constants.ProductNames.BuyLivesSmall)
+            {
+                pInfo++;
+                information = productInfos[pInfo];
+                
+            }
+          return information; 
+
         }
 
         private decimal CalculateSavePercent(ProductInfo smallPackage, ProductInfo bulkPackage)
