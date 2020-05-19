@@ -26,9 +26,9 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
 
         private decimal CalculateSavePercent(ProductInfo smallPackage, ProductInfo bulkPackage)
         {
-            decimal standardPrice = smallPackage.Price * smallPackage.Quantity;
-            decimal bulkPrice = standardPrice * bulkPackage.Price;
-            decimal packagePrice = bulkPrice / bulkPackage.Quantity;
+            decimal smallBulkPrice = smallPackage.Price / smallPackage.Quantity * bulkPackage.Quantity;
+            decimal bulkPrice = bulkPackage.Price;
+            decimal packagePrice = bulkPrice / smallBulkPrice;
             decimal priceSaved = (1 - packagePrice) * 100;
             decimal retVal = priceSaved;
             return retVal;

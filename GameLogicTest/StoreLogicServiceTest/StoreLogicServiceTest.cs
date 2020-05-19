@@ -193,7 +193,31 @@ namespace GameLogicTest.StoreLogicServiceTest
 
             Assert.AreEqual(70M, result);
         }
-        
+
+        [TestMethod]
+        public void CalculateSavePercent_DecimalPricesMedium()
+        {
+            var smallProduct = new ProductInfo { Price = 0.99M, Quantity = 10 };
+            var bulkProduct = new ProductInfo { Price = 1.99M, Quantity = 30 };
+            decimal calculation = (1M - (1.99M / (0.99M/10*30))) * 100M;
+
+            var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
+            
+            Assert.AreEqual(calculation, result);
+        }
+
+        [TestMethod]
+        public void CalculateSavePercent_DecimalPricesLarge()
+        {
+            var smallProduct = new ProductInfo { Price = 0.99M, Quantity = 10 };
+            var bulkProduct = new ProductInfo { Price = 2.99M, Quantity = 55 };
+            decimal calculation = (1M - (2.99M / (0.99M/10*55))) * 100M;
+
+            var result = CallPrivateMethod<decimal>(_storeLogicService, "CalculateSavePercent", new object[] { smallProduct, bulkProduct });
+
+            Assert.AreEqual(calculation, result);
+        }
+
         [TestMethod]
         public void GenerateSavePctString()
         {
