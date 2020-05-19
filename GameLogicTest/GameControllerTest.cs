@@ -23,6 +23,16 @@ namespace GameLogicTest
         {
             //todo: need to be able to clear all properties (can't  re-instantiate since it's singleton)
             //      * maybe re-evaluate to see if this really needs to be singleton
+            _gameController = GameController.Instance;
+        }
+
+        [TestMethod]
+        public void OnProductsConvertedHandler()
+        {
+            var productsForUI = new List<ProductInfoViewModel>();
+            CallPrivateMethod(_gameController, "OnProductsConvertedHandler", new object[] { productsForUI });
+
+            Assert.AreEqual(productsForUI, _gameController.ProductsForUI);
         }
 
         [TestMethod]
@@ -95,6 +105,56 @@ namespace GameLogicTest
             #endregion
         }
 
+        [TestMethod]
+        public void OnStart_SetOnAppStoreInitialized()
+        {
+            //setup
+            //todo: dup mocking code. move common code to TestInitialize()
+            var gameController = GameController.Instance;
+
+            var gameEngineInterface = Substitute.For<IGameEngineInterface>();
+            gameEngineInterface.AppStoreService = Substitute.For<IAppStoreService>();
+            gameEngineInterface.AppStoreService.OnPurchaseSucceededEventHandler = null;
+            gameEngineInterface.AppStoreService.OnAppStoreInitialized = null;
+
+            var storeLogicService = Substitute.For<IStoreLogicService>();
+            storeLogicService.DataLayer = null;
+
+            var dataLayer = Substitute.For<IDataLayer>();
+            gameController.CurLevel = new LevelInfo(3, 1);
+
+            //run
+            gameController.OnStart(gameEngineInterface, dataLayer, storeLogicService);
+
+            //assert
+            Assert.IsNotNull(gameEngineInterface.AppStoreService.OnAppStoreInitialized);
+        }
+
+        [TestMethod]
+        public void OnStart_SetOnProductsConverted()
+        {
+            //setup
+            //todo: dup mocking code. move common code to TestInitialize()
+            var gameController = GameController.Instance;
+
+            var gameEngineInterface = Substitute.For<IGameEngineInterface>();
+            gameEngineInterface.AppStoreService = Substitute.For<IAppStoreService>();
+            gameEngineInterface.AppStoreService.OnPurchaseSucceededEventHandler = null;
+            gameEngineInterface.AppStoreService.OnAppStoreInitialized = null;
+
+            var storeLogicService = Substitute.For<IStoreLogicService>();
+            storeLogicService.DataLayer = null;
+            storeLogicService.OnProductsConverted = null;
+
+            var dataLayer = Substitute.For<IDataLayer>();
+            gameController.CurLevel = new LevelInfo(3, 1);
+
+            //run
+            gameController.OnStart(gameEngineInterface, dataLayer, storeLogicService);
+
+            //assert
+            Assert.IsNotNull(storeLogicService.OnProductsConverted);
+        }
         [TestMethod]
         public void OnUpdate_ShouldUpdate()
         {
