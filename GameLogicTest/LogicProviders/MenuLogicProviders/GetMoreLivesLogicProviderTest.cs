@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThirdEyeSoftware.GameLogic;
 using ThirdEyeSoftware.GameLogic.LogicHandlers;
+using ThirdEyeSoftware.GameLogic.StoreLogicService;
 
 namespace GameLogicTest.LogicProviders.MenuLogicProviders
 {
@@ -26,6 +27,7 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
         private IGameObject _btnBuyLivesLarge;
         private IGameObject _txtCurrentLivesGameObject;
         private IText _txtCurrentLives;
+        private Dictionary<string, Tuple<IText, IText>> _buttonAndSaveLabels = new Dictionary<string, Tuple<IText, IText>>();
 
         [TestInitialize]
         public void TestInitialize()
@@ -57,6 +59,23 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
             _txtCurrentLives = Substitute.For<IText>();
             _txtCurrentLivesGameObject.GetComponent<IText>().Returns(_txtCurrentLives);
             _gameEngineInterface.FindGameObject("txtCurrentLives").Returns(_txtCurrentLivesGameObject);
+
+
+            _buttonAndSaveLabels[Constants.ProductNames.BuyLivesSmall] = new Tuple<IText, IText>(Substitute.For<IText>(), Substitute.For<IText>());
+            _btnBuyLivesSmall.GetComponent<IText>().Returns(_buttonAndSaveLabels[Constants.ProductNames.BuyLivesSmall].Item1);
+
+            _buttonAndSaveLabels[Constants.ProductNames.BuyLivesMedium] = new Tuple<IText, IText>(Substitute.For<IText>(), Substitute.For<IText>());
+            _btnBuyLivesMedium.GetComponent<IText>().Returns(_buttonAndSaveLabels[Constants.ProductNames.BuyLivesMedium].Item1);
+            var savePctMediumGameObj = Substitute.For<IGameObject>();
+            savePctMediumGameObj.GetComponent<IText>().Returns(_buttonAndSaveLabels[Constants.ProductNames.BuyLivesMedium].Item2);
+            _gameEngineInterface.FindGameObject("txtBuyLivesMediumSavePct").Returns(savePctMediumGameObj);
+            
+                
+            _buttonAndSaveLabels[Constants.ProductNames.BuyLivesLarge] = new Tuple<IText, IText>(Substitute.For<IText>(), Substitute.For<IText>());
+            _btnBuyLivesLarge.GetComponent<IText>().Returns(_buttonAndSaveLabels[Constants.ProductNames.BuyLivesLarge].Item1);
+            var savePctLargeGameObj = Substitute.For<IGameObject>();
+            savePctLargeGameObj.GetComponent<IText>().Returns(_buttonAndSaveLabels[Constants.ProductNames.BuyLivesLarge].Item2);
+            _gameEngineInterface.FindGameObject("txtBuyLivesLargeSavePct").Returns(savePctLargeGameObj);
         }
 
         [TestMethod]
@@ -138,6 +157,39 @@ namespace GameLogicTest.LogicProviders.MenuLogicProviders
             _getMoreLivesLogicProvider.OnClick("btnBuyLivesLarge");
             _gameEngineInterface.AppStoreService.Received(1).BuyProductByID(Constants.ProductNames.BuyLivesLarge);
             _logicHandler.Received(1).SetSceneState((int)MenuState.InMenu);
+        }
+
+        [TestMethod]
+        public void OnPricesLoaded()
+        {
+            _getMoreLivesLogicProvider.OnStart();
+
+            var products = new List<ProductInfoViewModel>()
+            {
+                new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesSmall, PriceString = "$0.99", SavePctString = string.Empty },
+                new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesMedium, PriceString = "$1.99", SavePctString = "SAVE 30%" },
+                new ProductInfoViewModel { ProductId = Constants.ProductNames.BuyLivesLarge, PriceString = "$2.99", SavePctString = "SAVE 40%" },
+            };
+            _getMoreLivesLogicProvider.OnPricesLoaded(products);
+
+            var buttonTextFormatString = @"{0}
+ LIVES 
+{1}";
+
+            var labels = _buttonAndSaveLabels[Constants.ProductNames.BuyLivesSmall];
+            var expectedButtonText = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Small, products[0].PriceString);
+            Assert.AreEqual(expectedButtonText, labels.Item1.Text);
+            Assert.AreEqual(products[0].SavePctString, labels.Item2.Text);
+
+            labels = _buttonAndSaveLabels[Constants.ProductNames.BuyLivesMedium];
+            expectedButtonText = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Medium, products[1].PriceString);
+            Assert.AreEqual(expectedButtonText, labels.Item1.Text);
+            Assert.AreEqual(products[1].SavePctString, labels.Item2.Text);
+
+            labels = _buttonAndSaveLabels[Constants.ProductNames.BuyLivesLarge];
+            expectedButtonText = string.Format(buttonTextFormatString, Constants.LivesPerProduct.Large, products[2].PriceString);
+            Assert.AreEqual(expectedButtonText, labels.Item1.Text);
+            Assert.AreEqual(products[2].SavePctString, labels.Item2.Text);
         }
     }
 }

@@ -3,18 +3,62 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ThirdEyeSoftware.GameLogic
+namespace ThirdEyeSoftware.GameLogic.StoreLogicService
 {
     public interface IStoreLogicService
     {
         IDataLayer DataLayer { get; set; }
         void OnAppStorePurchaseSucceeded(string productId);
         Action<string> LogToDebugOutput { get; set; }
+        List<string> ValidateProducts(List<ProductInfo> products);
     }
 
     public class StoreLogicService : IStoreLogicService
     {
         private static readonly StoreLogicService _instance = new StoreLogicService();
+
+        private ProductInfo FindSmallestProductInfo(List<ProductInfo> productInfos)
+        {
+            foreach (var element in productInfos)
+            {
+                if (element.ProductId == Constants.ProductNames.BuyLivesSmall)  
+                {
+                    return element;
+                }
+                                
+            }
+            throw new InvalidOperationException(); 
+        }
+
+        private decimal CalculateSavePercent(ProductInfo smallPackage, ProductInfo bulkPackage)
+        {
+            decimal standardPrice = smallPackage.Price;
+            decimal bulkPrice = standardPrice * bulkPackage.Price;
+            decimal packagePrice = bulkPrice / bulkPackage.Quantity;
+            decimal priceSaved = (1 - packagePrice) * 100;
+            return priceSaved;
+            
+            throw new NotImplementedException();
+        }
+
+        private string GenerateSavePctString(decimal savePct)
+        {                           
+            if (savePct <= 0) 
+            {
+             return string.Empty;
+            } 
+            else 
+            {
+             return @"SAVE " + Math.Truncate(savePct) + "%";
+            } 
+
+           //throw new NotImplementedException();
+        }
+
+        private void SetProductQuantity(List<ProductInfo> products)
+        {
+            throw new NotImplementedException();
+        }
 
         public static StoreLogicService Instance
         {
@@ -63,5 +107,13 @@ namespace ThirdEyeSoftware.GameLogic
                 throw;
             }
         }
+
+        public List<string> ValidateProducts(List<ProductInfo> products)
+        {
+            return null;
+        }
+        
+        
     }
+    
 }
