@@ -64,21 +64,21 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
             dicNumberofLives.Add(Constants.ProductNames.BuyLivesMedium, Constants.LivesPerProduct.Medium);
             dicNumberofLives.Add(Constants.ProductNames.BuyLivesLarge, Constants.LivesPerProduct.Large);
             
-            foreach (var element in products)
+            foreach (var curProductInfo in products)
             {
-                if (element.ProductId == Constants.ProductNames.BuyLivesSmall)
+                if (curProductInfo.ProductId == Constants.ProductNames.BuyLivesSmall)
                 {
-                    element.Quantity = Constants.LivesPerProduct.Small;
+                    curProductInfo.Quantity = Constants.LivesPerProduct.Small;
                 }
-                else if (element.ProductId == Constants.ProductNames.BuyLivesMedium)
+                else if (curProductInfo.ProductId == Constants.ProductNames.BuyLivesMedium)
                 {
-                    element.Quantity = Constants.LivesPerProduct.Medium;
+                    curProductInfo.Quantity = Constants.LivesPerProduct.Medium;
                 }
-                else if (element.ProductId == Constants.ProductNames.BuyLivesLarge)
+                else if (curProductInfo.ProductId == Constants.ProductNames.BuyLivesLarge)
                 {
-                    element.Quantity = Constants.LivesPerProduct.Large;
+                    curProductInfo.Quantity = Constants.LivesPerProduct.Large;
                 }
-                //element.Quantity = dicNumberofLives[element.ProductId]; to use dictionary  
+                //curProductInfo.Quantity = dicNumberofLives[element.ProductId]; to use dictionary  
             }
 
         }
