@@ -24,8 +24,7 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
                 if (curProductInfo.ProductId == Constants.ProductNames.BuyLivesSmall)  
                 {
                     return curProductInfo;
-                }
-                                
+                }    
             }
             throw new InvalidOperationException(); 
         }
