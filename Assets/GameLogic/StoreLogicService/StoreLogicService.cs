@@ -52,18 +52,8 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
         }
 
         private void SetProductQuantity(List<ProductInfo> products)
-             /* use Constants.ProductNames to determine which ProductInfo is small/medium/large. (compare to ProductInfo.ProductId)
-                use Constants.LivesPerProduct to know how many lives are in small/medium/large.
-                use a Dictionary<string, int> to create mapping from Product Id -> Number of Lives
-                e.g.myDictionary["small"] = 10;
-                now you don't need if statements: if(productInfo.ProductId == Constants.ProductNames.Small */
-
         {
-            Dictionary<string, int> dicNumberofLives = new Dictionary<string, int>();
-            dicNumberofLives.Add(Constants.ProductNames.BuyLivesSmall, Constants.LivesPerProduct.Small);
-            dicNumberofLives.Add(Constants.ProductNames.BuyLivesMedium, Constants.LivesPerProduct.Medium);
-            dicNumberofLives.Add(Constants.ProductNames.BuyLivesLarge, Constants.LivesPerProduct.Large);
-            
+                       
             foreach (var curProductInfo in products)
             {
                 if (curProductInfo.ProductId == Constants.ProductNames.BuyLivesSmall)
@@ -78,7 +68,7 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
                 {
                     curProductInfo.Quantity = Constants.LivesPerProduct.Large;
                 }
-                //curProductInfo.Quantity = dicNumberofLives[element.ProductId]; to use dictionary  
+              
             }
 
         }
