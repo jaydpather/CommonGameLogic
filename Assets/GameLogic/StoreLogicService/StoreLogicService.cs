@@ -53,7 +53,24 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
 
         private void SetProductQuantity(List<ProductInfo> products)
         {
-            throw new NotImplementedException();
+                       
+            foreach (var curProductInfo in products)
+            {
+                if (curProductInfo.ProductId == Constants.ProductNames.BuyLivesSmall)
+                {
+                    curProductInfo.Quantity = Constants.LivesPerProduct.Small;
+                }
+                else if (curProductInfo.ProductId == Constants.ProductNames.BuyLivesMedium)
+                {
+                    curProductInfo.Quantity = Constants.LivesPerProduct.Medium;
+                }
+                else if (curProductInfo.ProductId == Constants.ProductNames.BuyLivesLarge)
+                {
+                    curProductInfo.Quantity = Constants.LivesPerProduct.Large;
+                }
+              
+            }
+
         }
 
         public static StoreLogicService Instance
