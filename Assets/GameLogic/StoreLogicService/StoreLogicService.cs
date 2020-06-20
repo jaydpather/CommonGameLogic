@@ -138,7 +138,31 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
 
         public List<string> ValidateProducts(List<ProductInfo> products)
         {
-            return null;
+            var errorMsgs = new List<string>();
+
+            var productNames = new List<string> { Constants.ProductNames.BuyLivesSmall, Constants.ProductNames.BuyLivesMedium, Constants.ProductNames.BuyLivesLarge };
+            foreach(var curProductName in productNames)
+            {
+                if(1 != products.Count(x => x.ProductId == curProductName))
+                {
+                    errorMsgs.Add($"'{curProductName}' is missing in list of products from Google Play Store.");
+                }
+            }
+
+            var extraProductIds = products.Where(x => !productNames.Contains(x.ProductId)).Select(x => x.ProductId);
+            var extraProductIdsString = string.Empty;
+            foreach(var curExtraProductId in extraProductIds)
+            {
+                extraProductIdsString += curExtraProductId;
+                extraProductIdsString += ", ";
+            }
+
+            if (extraProductIds.Count() > 0)
+            {
+                errorMsgs.Add($"extra products found: {extraProductIdsString}");
+            }
+
+            return errorMsgs;
         }
 
         public void OnProductsLoaded(List<ProductInfo> validatedProducts)

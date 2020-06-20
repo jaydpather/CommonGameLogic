@@ -74,7 +74,7 @@ namespace GameLogicTest.StoreLogicServiceTest
 
             Assert.IsNotNull(results);
             Assert.AreEqual(1, results.Count);
-            Assert.IsTrue(results[0].Contains(VALIDATE_PRODUCTS_MISSING));
+            Assert.IsTrue(results[0].Contains(VALIDATE_PRODUCTS_EXTRA));
         }
 
         [TestMethod]
