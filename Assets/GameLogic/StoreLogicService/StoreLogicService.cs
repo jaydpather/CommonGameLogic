@@ -19,13 +19,12 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
 
         private ProductInfo FindSmallestProductInfo(List<ProductInfo> productInfos)
         {
-            foreach (var element in productInfos)
+            foreach (var curProductInfo in productInfos)
             {
-                if (element.ProductId == Constants.ProductNames.BuyLivesSmall)  
+                if (curProductInfo.ProductId == Constants.ProductNames.BuyLivesSmall)  
                 {
-                    return element;
-                }
-                                
+                    return curProductInfo;
+                }    
             }
             throw new InvalidOperationException(); 
         }
