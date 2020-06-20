@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace ThirdEyeSoftware.GameLogic.StoreLogicService
@@ -141,7 +143,28 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
 
         public void OnProductsLoaded(List<ProductInfo> validatedProducts)
         {
-            
+            List<ProductInfoViewModel> listProductInfoViewModel = new List<ProductInfoViewModel>();
+
+            SetProductQuantity(validatedProducts);
+            var smallestProduct = FindSmallestProductInfo(validatedProducts);
+
+            foreach (var curProductInfo in validatedProducts)
+            {
+                ProductInfoViewModel viewModel = new ProductInfoViewModel();
+                listProductInfoViewModel.Add(viewModel);
+                viewModel.PriceString = curProductInfo.PriceString;
+                viewModel.ProductId = curProductInfo.ProductId;
+                decimal savepct = CalculateSavePercent(smallestProduct, curProductInfo);
+                viewModel.SavePctString = GenerateSavePctString(savepct);
+
+                return;
+            }
+
+            if (validatedProducts != null)
+            {
+                OnProductsConverted.Invoke(listProductInfoViewModel);
+            }
+           
         }
     }
     

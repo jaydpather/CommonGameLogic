@@ -305,6 +305,7 @@ namespace GameLogicTest.StoreLogicServiceTest
             Assert.AreEqual(3, validatedProducts.Count); //check for correct test setup
             Assert.AreEqual(validatedProducts.Count, expectedSaveStrings.Length); //check for correct test setup
 
+            //todo: how can we assert that the OnProductsConverted callback was actually called?
             _storeLogicService.OnProductsConverted = viewModels =>
             {
                 Assert.IsNotNull(viewModels);
@@ -327,8 +328,6 @@ namespace GameLogicTest.StoreLogicServiceTest
             Assert.AreEqual(Constants.LivesPerProduct.Small, validatedProducts[0].Quantity);
             Assert.AreEqual(Constants.LivesPerProduct.Medium, validatedProducts[1].Quantity);
             Assert.AreEqual(Constants.LivesPerProduct.Large, validatedProducts[2].Quantity);
-
-            _storeLogicService.OnProductsConverted.ReceivedWithAnyArgs(1);
         }
     }
 }
