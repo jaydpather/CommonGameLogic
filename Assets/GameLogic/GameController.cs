@@ -253,6 +253,7 @@ namespace ThirdEyeSoftware.GameLogic
             MenuLogicHandler.GameEngineInterface = gameEngineInterface;
             GameLogicHandler.GameEngineInterface = gameEngineInterface;
 
+            GameEngineInterface.AppStoreService.OnAppStoreInitialized = storeLogicService.OnProductsLoaded;
             GameEngineInterface.AppStoreService.OnPurchaseSucceededEventHandler = storeLogicService.OnAppStorePurchaseSucceeded;
 
             GameEngineInterface.VSyncCount = 1;
