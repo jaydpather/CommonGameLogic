@@ -212,7 +212,7 @@ namespace ThirdEyeSoftware.GameLogic
 
         private void OnProductsConvertedHandler(List<ProductInfoViewModel> productsForUI)
         {
-
+            ProductsForUI = productsForUI;
         }
 
         public void ProgressToNextLevel()
@@ -255,6 +255,7 @@ namespace ThirdEyeSoftware.GameLogic
 
             GameEngineInterface.AppStoreService.OnAppStoreInitialized = storeLogicService.OnProductsLoaded;
             GameEngineInterface.AppStoreService.OnPurchaseSucceededEventHandler = storeLogicService.OnAppStorePurchaseSucceeded;
+            storeLogicService.OnProductsConverted = OnProductsConvertedHandler;
 
             GameEngineInterface.VSyncCount = 1;
 
