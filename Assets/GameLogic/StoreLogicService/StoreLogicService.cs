@@ -146,6 +146,7 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
             List<ProductInfoViewModel> listProductInfoViewModel = new List<ProductInfoViewModel>();
 
             SetProductQuantity(validatedProducts);
+            var smallestProduct = FindSmallestProductInfo(validatedProducts);
 
             foreach (var curProductInfo in validatedProducts)
             {
@@ -153,7 +154,7 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
                 listProductInfoViewModel.Add(viewModel);
                 viewModel.PriceString = curProductInfo.PriceString;
                 viewModel.ProductId = curProductInfo.ProductId;
-                decimal savepct = CalculateSavePercent(curProductInfo, curProductInfo);
+                decimal savepct = CalculateSavePercent(smallestProduct, curProductInfo);
                 viewModel.SavePctString = GenerateSavePctString(savepct);
 
                 return;
