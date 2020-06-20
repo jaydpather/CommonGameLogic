@@ -11,15 +11,30 @@ namespace GameLogicTest
     {
         protected void CallPrivateMethod(object objectToCall, string methodName, object[] parameters)
         {
-            var methodInfo = objectToCall.GetType().GetMethod(methodName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            methodInfo.Invoke(objectToCall, parameters);
+            try
+            {
+                var methodInfo = objectToCall.GetType().GetMethod(methodName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                methodInfo.Invoke(objectToCall, parameters);
+            }
+            catch(TargetInvocationException ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         protected T CallPrivateMethod<T>(object objectToCall, string methodName, object[] parameters)
         {
             var methodInfo = objectToCall.GetType().GetMethod(methodName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-            var retVal = (T)methodInfo.Invoke(objectToCall, parameters);
+            T retVal;
+            try
+            {
+                retVal = (T)methodInfo.Invoke(objectToCall, parameters);
+            }
+            catch(TargetInvocationException ex)
+            {
+                throw ex.InnerException;
+            }
 
             return retVal;
         }

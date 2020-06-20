@@ -1,2 +1,2 @@
 # CommonGameLogic
- reusable code for any Unity game
+ reusable code for any game, decoupled from the game engine
