@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ThirdEyeSoftware.GameLogic.LogicHandlers;
+using ThirdEyeSoftware.GameLogic.StoreLogicService;
 
 //todo v2: move GameLogic project above Assets folder, like GameLogicTest. (This prevents Unity from including the GameLogic source files in the TestGame project).
 namespace ThirdEyeSoftware.GameLogic
@@ -19,6 +20,7 @@ namespace ThirdEyeSoftware.GameLogic
         void ProgressToNextLevel();
         bool JustBeatMaxLevel { get; }
         bool JustSavedLatestLevel { get; set; }
+        List<ProductInfoViewModel> ProductsForUI { get; set; }
     }
 
     public class ScoreInfo
@@ -118,7 +120,7 @@ namespace ThirdEyeSoftware.GameLogic
         private ILogicHandler _gameLogicHandler;
         private ILogicHandler _menuLogicHandler;
         public bool ShouldUpdate { get; set; }
-
+        public List<ProductInfoViewModel> ProductsForUI { get; set; } = new List<ProductInfoViewModel>();
 
         public static GameController Instance
         {
@@ -208,6 +210,11 @@ namespace ThirdEyeSoftware.GameLogic
             set;
         }
 
+        private void OnProductsConvertedHandler(List<ProductInfoViewModel> productsForUI)
+        {
+            ProductsForUI = productsForUI;
+        }
+
         public void ProgressToNextLevel()
         {
             if (CurLevel.SubLevel < Constants.Levels.NumSubLevels)
@@ -246,7 +253,9 @@ namespace ThirdEyeSoftware.GameLogic
             MenuLogicHandler.GameEngineInterface = gameEngineInterface;
             GameLogicHandler.GameEngineInterface = gameEngineInterface;
 
+            GameEngineInterface.AppStoreService.OnAppStoreInitialized = storeLogicService.OnProductsLoaded;
             GameEngineInterface.AppStoreService.OnPurchaseSucceededEventHandler = storeLogicService.OnAppStorePurchaseSucceeded;
+            storeLogicService.OnProductsConverted = OnProductsConvertedHandler;
 
             GameEngineInterface.VSyncCount = 1;
 
