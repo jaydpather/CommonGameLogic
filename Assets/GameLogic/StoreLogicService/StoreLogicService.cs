@@ -180,8 +180,6 @@ namespace ThirdEyeSoftware.GameLogic.StoreLogicService
                 viewModel.ProductId = curProductInfo.ProductId;
                 decimal savepct = CalculateSavePercent(smallestProduct, curProductInfo);
                 viewModel.SavePctString = GenerateSavePctString(savepct);
-
-                return;
             }
 
             if (validatedProducts != null)
